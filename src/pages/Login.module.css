@@ -1,0 +1,36 @@
+/* @media (max-width: 992px) {
+    .carousel {
+        display: none !important;
+    }
+    .carouselLoginBox {
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 10px;
+    }
+    .loginForm {
+        padding: 2rem 2rem 3rem 2rem !important;
+        gap: 2rem !important;
+        width: 90% !important;
+        max-width: 530px;
+        border-radius: 10px;
+        box-shadow: 0 10px 15px 2px rgba(0, 0, 0, 0.3);
+        > div {
+            text-align: center;
+        }
+        form {
+            width: 95% !important;
+        }
+    }
+    .bss {
+        font-size: 32px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .loginForm {
+        > div {
+            align-self: flex-start;
+            text-align: left;
+        }
+    }
+} */
