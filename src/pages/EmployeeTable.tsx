@@ -1,5 +1,9 @@
+import useTitle from "../hooks/useTitle"
+
 export default function EmployeeTable() {
+    useTitle('Table Management')
+    
     return (
-        <p>employeetable</p>
+        <p>Tables</p>
     )
 }

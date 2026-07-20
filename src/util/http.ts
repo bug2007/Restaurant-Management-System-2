@@ -7,6 +7,14 @@ interface LoginData  {
   password: string;
 }; 
 
+interface GetEmployeesParams {
+  signal: AbortSignal;
+  page?: number;
+  perPage?: number;
+  search?: string;
+  sort?: string;
+}
+
 export async function loginAdmin({userName, password}: LoginData) {
     const response = await fetch('https://bssrms.runasp.net/api/Auth/signIn', {
         method: 'POST',
@@ -45,30 +53,30 @@ export async function loginAdmin({userName, password}: LoginData) {
 //     return userInfo;
 // }
 
-// export async function getEmployees({signal, page, perPage, search, sort}) {
-//     const token = localStorage.getItem('token');
+export async function getEmployees({signal, page, perPage, search, sort}: GetEmployeesParams) {
+    const token = localStorage.getItem('accessToken');
 
-//     const params = new URLSearchParams();
-//     if (page) params.append('Page', page);
-//     if (perPage) params.append('Per_Page', perPage);
-//     if (search) params.append('Search', search);
-//     if (sort) params.append('Sort', sort);
+    const params = new URLSearchParams();
+    if (page) params.append('Page', String(page));
+    if (perPage) params.append('Per_Page', String(perPage));
+    if (search) params.append('Search', search);
+    if (sort) params.append('Sort', sort);
 
-//     const url = `https://bssrms.runasp.net/api/Employee/datatable?${params.toString()}`;
+    const url = `https://bssrms.runasp.net/api/Employee/datatable?${params.toString()}`;
     
-//     const response = await fetch(url,{
-//         method: 'GET',
-//         headers: {
-//             'accept': '*/*',
-//             'Authorization': `Bearer ${token}`
-//         },
-//         signal
-//     })
+    const response = await fetch(url,{
+        method: 'GET',
+        headers: {
+            'accept': '*/*',
+            'Authorization': `Bearer ${token}`
+        },
+        signal
+    })
 
-//     if (!response.ok) {
-//         throw new Error('Failed to fetch employees.')
-//     }
+    if (!response.ok) {
+        throw new Error('Failed to fetch employees.')
+    }
 
-//     const result = await response.json()
-//     return result
-// } 
+    const result = await response.json()
+    return result
+} 
