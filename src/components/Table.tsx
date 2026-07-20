@@ -40,6 +40,11 @@ interface EnhancedTableHeadProps {
   ) => void;
 }
 
+interface HeadCell {
+  id: string,
+  label: string
+}
+
 interface EnhancedTableProps {
   rows: Employee[];
   total: number;
@@ -51,6 +56,7 @@ interface EnhancedTableProps {
   sort: string;
   onSortChange: (sort: string) => void;
   isPending: boolean;
+  headCells: HeadCell[]
 }
 
 function formatDate(date: string) {
@@ -80,35 +86,9 @@ function formatDate(date: string) {
 //     : (a, b) => -descendingComparator(a, b, orderBy);
 // }
 
-const headCells = [
-  {
-    id: 'fullName',
-    label: 'Employee',
-  },
-  {
-    id: 'email',
-    label: 'Email',
-  },
-  {
-    id: 'designation',
-    label: 'Designation',
-  },
-  {
-    id: 'joinDate',
-    label: 'Join Date',
-  },
-  {
-    id: 'phoneNumber',
-    label: 'Phone',
-  },
-  {
-    id: 'actions',
-    label: 'Actions',
-  },
-];
 
 function EnhancedTableHead(props: EnhancedTableHeadProps) {
-  const { order, orderBy, onRequestSort } =
+  const { order, orderBy, onRequestSort, headCells } =
     props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
@@ -149,7 +129,7 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
   );
 }
 
-export default function EnhancedTable({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending}: EnhancedTableProps) {
+export default function EnhancedTable({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps) {
 
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: string) => {
     const [currentField, currentOrder] = sort.split(' ');
@@ -217,6 +197,7 @@ export default function EnhancedTable({rows, total, currentPage, rowsPerPage, ro
             aria-labelledby="tableTitle"
           >
             <EnhancedTableHead
+              headCells={headCells}
               order={sort.split(' ')[1] || 'asc'}
               orderBy={sort.split(' ')[0] || ''}
               onRequestSort={handleRequestSort}

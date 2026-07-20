@@ -4,6 +4,32 @@ import useTitle from "../hooks/useTitle.js";
 import EnhancedTable from "../components/Table.jsx";
 import { useState } from "react";
 
+const headCells = [
+  {
+    id: 'fullName',
+    label: 'Employee',
+  },
+  {
+    id: 'email',
+    label: 'Email',
+  },
+  {
+    id: 'designation',
+    label: 'Designation',
+  },
+  {
+    id: 'joinDate',
+    label: 'Join Date',
+  },
+  {
+    id: 'phoneNumber',
+    label: 'Phone',
+  },
+  {
+    id: 'actions',
+    label: 'Actions',
+  },
+];
 
 export default function Employees() {
     useTitle('Employee Management')
@@ -26,6 +52,7 @@ export default function Employees() {
     
     return (
         <EnhancedTable 
+            headCells={headCells}
             isPending={isPending}
             rows={data?.data || []} 
             total={total}
