@@ -27,30 +27,35 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <AppNavigation />,
-    loader: checkAuthLoader,
     children: [
       {
         index: true,
-        element: <Navigate to="employees" replace />,
+        loader: checkAuthLoader,
+        element: <Navigate to="employees" replace />, // pressing back goes back to whatever page the user was on before /dashboard, not to /dashboard itself. that wud lead user to /dashboard/employees again so user wud bounce back and forth
       },
       {
         path: "employees",
+        loader: checkAuthLoader,
         element: <Employees />,
       },
       {
         path: "tables",
+        loader: checkAuthLoader,
         element: <EmployeeTable />,
       },
       {
         path: "foods",
+        loader: checkAuthLoader,
         element: <Foods />,
       },
       {
         path: "new-order",
+        loader: checkAuthLoader,
         element: <NewOrder />,
       },
       {
         path: "orders",
+        loader: checkAuthLoader,
         element: <Orders />,
       },
     ],

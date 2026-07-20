@@ -13,7 +13,7 @@ export function tokenExpired(token: string) {
     return exp*1000 <= Date.now()
 }
 
-function logOut() {
+export function logOut() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("refreshTokenExpiryTime");

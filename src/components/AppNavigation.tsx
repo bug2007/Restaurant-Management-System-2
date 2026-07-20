@@ -6,6 +6,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
+import { Button } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -16,7 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -33,6 +34,8 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import logoImg from '../assets/logo.png'
+
+import { logOut } from '../util/auth';
 
 interface DrawerProps {
     open: boolean;
@@ -142,6 +145,7 @@ export default function AppNavigation() {
   const [open, setOpen] = useState(false);
   const [title, setTitle]= useState('Dashboard')
   const location = useLocation();
+  const navigate = useNavigate()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -176,6 +180,7 @@ export default function AppNavigation() {
           <Typography variant="h6" noWrap component="div">
             {title}
           </Typography>
+          <Button color='secondary' onClick={() => {logOut(); navigate('/login')}}>Logout</Button>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open} 
