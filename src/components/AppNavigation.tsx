@@ -209,6 +209,7 @@ export default function AppNavigation() {
                     minHeight: 48,
                     px: !open ? 2.5 : undefined,
                     borderRadius: 2,
+                    mb: 1,
                     '&&.active':{
                         bgcolor: (theme) => alpha(theme.palette.primary.main, 0.2),
                         color: 'primary.main',

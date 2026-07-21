@@ -110,7 +110,7 @@ export default function EnhancedTable<T extends SingleRow>({rows, total, current
           ><CircularProgress />
         </Box>
       )}
-      <Paper sx={{ width: '100%', mb: 2, borderRadius: 3, overflow: 'hidden'}} elevation={4}>
+      <Paper sx={{ width: '100%', mb: 2, borderRadius: 3, overflow: 'hidden', border: 1, borderColor: 'divider'}} elevation={0}>
         <TableContainer sx={{
             height: isPending ? '25vh' : '75vh',
             '&::-webkit-scrollbar': { display: 'none' },
