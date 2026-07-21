@@ -1,5 +1,9 @@
 import React from "react";
 
+export interface SingleRow {
+    id: string | number;
+}
+
 export interface User {
   id: string;
   fullName: string;
@@ -37,8 +41,8 @@ export interface HeadCell<T> {
   renderImage?: (row: T) => string | null;
   render: (row: T) => React.ReactNode;
 }
-
-export interface EnhancedTableHeadProps<T> {
+ 
+export interface EnhancedTableHeadProps<T extends SingleRow> {   //T can be any type, as long as it has at least the properties of SingleRow
   order: "asc" | "desc";
   orderBy: string;
   onRequestSort: (
@@ -48,7 +52,7 @@ export interface EnhancedTableHeadProps<T> {
   headCells: HeadCell<T>[];
 }
 
-export interface EnhancedTableProps<T> {
+export interface EnhancedTableProps<T extends SingleRow> {
   rows: T[];
   total: number;
   currentPage: number;

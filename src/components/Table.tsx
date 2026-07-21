@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import { Icon, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import noProfileImg from '../assets/noPfp.png'
 import CircularProgress from '@mui/material/CircularProgress';
@@ -17,15 +17,13 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 import type {
-  // Employee,
-  // EmployeeTable,
-  // HeadCell,
   EnhancedTableHeadProps,
   EnhancedTableProps,
+  SingleRow
 } from "../types.ts";
 
 
-function EnhancedTableHead<T>(props: EnhancedTableHeadProps<T>) {
+function EnhancedTableHead<T extends SingleRow>(props: EnhancedTableHeadProps<T>) {
   const { order, orderBy, onRequestSort, headCells } =
     props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
@@ -67,7 +65,7 @@ function EnhancedTableHead<T>(props: EnhancedTableHeadProps<T>) {
   );
 }
 
-export default function EnhancedTable<T>({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps<T>) {
+export default function EnhancedTable<T extends SingleRow>({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps<T>) {
   const order = sort.split(" ")[1];
   const tableOrder: "asc" | "desc" = order === "desc" ? "desc" : "asc";
 
