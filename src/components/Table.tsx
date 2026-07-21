@@ -71,7 +71,7 @@ export default function EnhancedTable<T extends SingleRow>({rows, total, current
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: string) => {
     if (property === "tableNumber" || property === "numberOfSeats") {
       if (sort === property) {
-        onSortChange(`${property}`)
+        onSortChange(`-${property}`)
       } else {
         onSortChange(property)
       }
