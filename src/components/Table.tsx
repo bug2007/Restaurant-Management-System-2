@@ -9,92 +9,30 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import { IconButton, Tooltip } from '@mui/material';
+import { Icon, IconButton, Tooltip } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import noProfileImg from '../assets/noPfp.png'
 import CircularProgress from '@mui/material/CircularProgress';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
-interface User {
-  id: string;
-  fullName: string;
-  email: string;
-  image: string | null;
-  phoneNumber: string;
-}
-
-interface Employee {
-  id: string;
-  designation: string;
-  joinDate: string;
-  user: User;
-}
-
-interface EnhancedTableHeadProps {
-  order: "asc" | "desc";
-  orderBy: string;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: string
-  ) => void;
-}
-
-interface HeadCell {
-  id: string,
-  label: string
-}
-
-interface EnhancedTableProps {
-  rows: Employee[];
-  total: number;
-  currentPage: number;
-  rowsPerPage: number;
-  rowsPerPageOptions: number[];
-  onPageChange: (page: number) => void;
-  onRowsPerPageChange: (rows: number) => void;
-  sort: string;
-  onSortChange: (sort: string) => void;
-  isPending: boolean;
-  headCells: HeadCell[]
-}
-
-function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-}
-
-// function descendingComparator(a, b, orderBy) {  
-//   const valA = (a.user[orderBy] || a[orderBy] || "").toString().toLowerCase()    // e.g a[orderBy] cud mean row['phoneNumber']
-//   const valB = (b.user[orderBy] || b[orderBy] || "").toString().toLowerCase();
-
-//   if (valB < valA) {    
-//     return -1;
-//   }
-//   if (valB > valA) {
-//     return 1;
-//   }
-//   return 0;
-// }
-
-// function getComparator(order, orderBy) {
-//   return order === 'desc'
-//     ? (a, b) => descendingComparator(a, b, orderBy)
-//     : (a, b) => -descendingComparator(a, b, orderBy);
-// }
+import type {
+  // Employee,
+  // EmployeeTable,
+  // HeadCell,
+  EnhancedTableHeadProps,
+  EnhancedTableProps,
+} from "../types.ts";
 
 
-function EnhancedTableHead(props: EnhancedTableHeadProps) {
+function EnhancedTableHead<T>(props: EnhancedTableHeadProps<T>) {
   const { order, orderBy, onRequestSort, headCells } =
     props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
-  return (
+  return ( 
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
@@ -103,7 +41,7 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
             sx={{width: headCell.id === 'actions' ? '10%' : '18%'}}
             // sortDirection={orderBy === headCell.id ? order : false}  // for screen readers
           >
-            {headCell.id !== 'actions' && headCell.id !== 'fullName' && headCell.id !== 'phoneNumber' ? (
+            {headCell.sortable ? (
               <TableSortLabel
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : 'asc'}
@@ -129,12 +67,14 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
   );
 }
 
-export default function EnhancedTable({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps) {
+export default function EnhancedTable<T>({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps<T>) {
+  const order = sort.split(" ")[1];
+  const tableOrder: "asc" | "desc" = order === "desc" ? "desc" : "asc";
 
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: string) => {
     const [currentField, currentOrder] = sort.split(' ');
 
-    let newOrder = 'asc';
+    let newOrder: "asc" | "desc" = 'asc';
 
     if (currentField === property && currentOrder === 'asc') {
       newOrder = 'desc';
@@ -198,83 +138,76 @@ export default function EnhancedTable({rows, total, currentPage, rowsPerPage, ro
           >
             <EnhancedTableHead
               headCells={headCells}
-              order={sort.split(' ')[1] || 'asc'}
+              order={tableOrder}
               orderBy={sort.split(' ')[0] || ''}
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {rows.map((row) => {
-                return (
+              {rows.map((row) => (
                   <TableRow
+                    key={row.id}
                     hover
                     sx={{
                       '&:hover .MuiTableCell-root': {
                         bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
                       }
                     }}
-                    key={row.id}
-                  >
-                    <TableCell sx={{display: 'flex', alignItems: 'center', gap: '15px'}}
+                  > 
+                    {headCells.map((headCell) => (
+                    <TableCell 
+                      key={headCell.id}
                       component="th"
                       scope="row"
                     >  
-                      <img 
-                        src={`https://bssrms.runasp.net/images/user/${row.user.image}`} 
-                        style={{width: '35px', height: '35px', borderRadius: '50%', objectFit: 'cover'}}
-                        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {e.currentTarget.src = noProfileImg, e.currentTarget.onerror=null}} />
-                      <Box sx={{}}>
-                        <Tooltip title={row.user.fullName} arrow placement='top-start'>
-                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {row.user.fullName}
-                        </Box>
-                        </Tooltip>
-                      </Box>
-                    </TableCell>
+                      {headCell.id === 'actions' ? (
+                        <>
+                          <Tooltip title='Edit' placement='top-start'>
+                            <IconButton sx={{'&:hover': {color: 'primary.main', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
+                              <EditOutlinedIcon />
+                            </IconButton>
+                          </Tooltip>
 
-                    <TableCell>
-                      <Tooltip title={row.user.email} arrow placement='top-start'>
-                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {row.user.email}
-                        </Box>
-                      </Tooltip>
-                    </TableCell>
-
-                    <TableCell>
-                      <Tooltip title={row.designation} arrow placement='top-start'>
-                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {row.designation}
-                        </Box>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell>
-                      <Tooltip title={formatDate(row.joinDate)} arrow placement='top-start'>
-                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {formatDate(row.joinDate)}
-                        </Box>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell>
-                      <Tooltip title={row.user.phoneNumber} arrow placement='top-start'>
-                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {row.user.phoneNumber}
-                        </Box>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell>
-                      <Tooltip title='Edit' placement='top-start'>
-                        <IconButton sx={{'&:hover': {color: 'primary.main', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
-                          <EditOutlinedIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title='Delete' placement='top-start'>
-                        <IconButton sx={{marginLeft: 2, '&:hover': {color: 'red', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
-                          <DeleteOutlinedIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
+                          <Tooltip title='Delete' placement='top-start'>
+                            <IconButton sx={{ml: 2, '&:hover': {color: 'red', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
+                              <DeleteOutlinedIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </>) : headCell.renderImage ? (
+                          <Box sx={{display: 'flex', alignItems: 'center', gap: '15px'}}>
+                            <img src={headCell.renderImage(row) || undefined} 
+                                  style={{width: 35, height: 35, borderRadius: '50%', objectFit: 'cover'}}
+                                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                    e.currentTarget.src = noProfileImg;
+                                    e.currentTarget.onerror = null
+                                  }} 
+                            />
+                            <Tooltip title={headCell.render(row)} arrow placement="top-start">
+                              <Box
+                                sx={{
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {headCell.render(row)}
+                              </Box>
+                            </Tooltip>
+                          </Box>) : (
+                            <Tooltip title={headCell.render(row)} arrow placement="top-start">
+                              <Box
+                                sx={{
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {headCell.render(row)}
+                              </Box>
+                            </Tooltip>
+                          )}
+                    </TableCell>))}
                   </TableRow>
-                );
-              })}
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -291,3 +224,23 @@ export default function EnhancedTable({rows, total, currentPage, rowsPerPage, ro
     </Box>
   );
 }
+
+
+// function descendingComparator(a, b, orderBy) {  
+//   const valA = (a.user[orderBy] || a[orderBy] || "").toString().toLowerCase()    // e.g a[orderBy] cud mean row['phoneNumber']
+//   const valB = (b.user[orderBy] || b[orderBy] || "").toString().toLowerCase();
+
+//   if (valB < valA) {    
+//     return -1;
+//   }
+//   if (valB > valA) {
+//     return 1;
+//   }
+//   return 0;
+// }
+
+// function getComparator(order, orderBy) {
+//   return order === 'desc'
+//     ? (a, b) => descendingComparator(a, b, orderBy)
+//     : (a, b) => -descendingComparator(a, b, orderBy);
+// }

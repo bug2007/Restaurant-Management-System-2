@@ -4,30 +4,53 @@ import useTitle from "../hooks/useTitle.js";
 import EnhancedTable from "../components/Table.jsx";
 import { useState } from "react";
 
-const headCells = [
+import type { Employee, HeadCell } from "../types.ts";
+
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+const headCells: HeadCell<Employee>[] = [
   {
     id: 'fullName',
     label: 'Employee',
-  },
+    sortable: false,
+    renderImage: (row) => `https://bssrms.runasp.net/images/user/${row.user.image}`,
+    render: (row) => row.user.fullName
+  }, 
   {
     id: 'email',
     label: 'Email',
+    sortable: true,
+    render: (row) => row.user.email
   },
   {
     id: 'designation',
     label: 'Designation',
+    sortable: true,
+    render: (row) => row.designation,
   },
   {
     id: 'joinDate',
     label: 'Join Date',
+    sortable: true,
+    render: (row) => formatDate(row.joinDate),
   },
   {
     id: 'phoneNumber',
     label: 'Phone',
+    sortable: false,
+    render: (row) => row.user.phoneNumber,
   },
   {
     id: 'actions',
     label: 'Actions',
+    sortable: false,
+    render: () => null,
   },
 ];
 
@@ -37,7 +60,7 @@ export default function Employees() {
     const [perPage, setPerPage] = useState<number | undefined>(undefined);
     const [sort, setSort] = useState('');
 
-    const { data, isPending, isError, error} = useQuery({
+    const { data, isPending} = useQuery({
         queryKey: ['employees', page, perPage, sort],
         queryFn: ({signal}) => getEmployees({signal, page, perPage, sort}) 
     })

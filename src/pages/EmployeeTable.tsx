@@ -1,34 +1,42 @@
 import { useQuery } from "@tanstack/react-query"
-import { getEmployees } from "../util/http.js"
+import { getTables } from "../util/http.js"
 import useTitle from "../hooks/useTitle.js";
 import EnhancedTable from "../components/Table.jsx";
 import { useState } from "react";
 
+import type { EmployeeTable, HeadCell } from "../types.ts";
 
-const headCells = [
-  {
-    id: 'fullName',
-    label: 'Employee',
+const headCells: HeadCell<EmployeeTable>[] = [
+  { 
+    id: 'tableNumber',
+    label: 'Table Number',
+    sortable: true,
+    renderImage: (row) => `https://bssrms.runasp.net/images/table/${row.image}`,
+    render: (row) => row.tableNumber,
   },
   {
-    id: 'email',
-    label: 'Email',
+    id: 'numberOfSeats',
+    label: 'Total Seats',
+    sortable: true,
+    render: (row) => row.numberOfSeats,
   },
   {
-    id: 'designation',
-    label: 'Designation',
+    id: 'isOccupied',
+    label: 'Booking Status',
+    sortable: false,
+    render: (row) => (row.isOccupied ? "Not available" : "Available"),
   },
   {
-    id: 'joinDate',
-    label: 'Join Date',
-  },
-  {
-    id: 'phoneNumber',
-    label: 'Phone',
+    id: 'employees',
+    label: 'Assigned Employees',
+    sortable: false,
+    render: (row) => row.employees.map(employee => employee.name).join(", "),
   },
   {
     id: 'actions',
     label: 'Actions',
+    sortable: false,
+    render: () => null,
   },
 ];
 
@@ -38,9 +46,9 @@ export default function EmployeeTable() {
     const [perPage, setPerPage] = useState<number | undefined>(undefined);
     const [sort, setSort] = useState('');
 
-    const { data, isPending, isError, error} = useQuery({
-        queryKey: ['employees', page, perPage, sort],
-        queryFn: ({signal}) => getEmployees({signal, page, perPage, sort}) 
+    const { data, isPending} = useQuery({
+        queryKey: ['tables', page, perPage, sort],
+        queryFn: ({signal}) => getTables({signal, page, perPage, sort}) 
     })
 
     const total = data?.total || 0;

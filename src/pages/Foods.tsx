@@ -38,7 +38,7 @@ export default function Employees() {
     const [perPage, setPerPage] = useState<number | undefined>(undefined);
     const [sort, setSort] = useState('');
 
-    const { data, isPending, isError, error} = useQuery({
+    const { data, isPending} = useQuery({
         queryKey: ['employees', page, perPage, sort],
         queryFn: ({signal}) => getEmployees({signal, page, perPage, sort}) 
     })
