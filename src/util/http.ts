@@ -111,31 +111,36 @@ export async function getTables({signal, page, perPage, search, sort}: GetEmploy
 
 export async function createOrder() {
     const token = localStorage.getItem('accessToken');
-
-    const response = await fetch('https://bssrms.runasp.net/api/Order/create', {
-        method: 'POST',
-        headers: {
-            'accept': 'text/plain',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            tableId: 6,
-            orderNumber: "21-Mou",
-            amount: 3000,
-            phoneNumber: "string",
-            items: [
-            {
-                foodId: 5,
-                foodPackageId: 0,
-                quantity: 6,
-                unitPrice: 500,
-                totalPrice: 3000,
+    try {
+        const response = await fetch('https://bssrms.runasp.net/api/Order/create', {
+            method: 'POST',
+            headers: {
+                'accept': 'text/plain',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            ],
+            body: JSON.stringify({
+                tableId: 6,
+                orderNumber: "21-Mou",
+                amount: 3000,
+                phoneNumber: "string",
+                items: [
+                {
+                    foodId: 5,
+                    foodPackageId: 0,
+                    quantity: 6,
+                    unitPrice: 500,
+                    totalPrice: 3000,
+                },
+                ],
+            })
         })
-    })
+        console.log(response.status)
+        const text = await response.text();
+        console.log(text);
+    } catch (err) {
+        console.error(err)
+    }
 
-    const text = await response.text();
-    console.log(text);
+    
 }
