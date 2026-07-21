@@ -122,8 +122,9 @@ export default function EnhancedTable<T extends SingleRow>({rows, total, current
               tableLayout: 'fixed', // to make widths stick
               minWidth: 750,
               '& .MuiTableCell-root': {
-                height: 80,
+                height: 65,
                 fontSize: '18px',
+                py: 0,
                 px: 4
               },
               '& .MuiTableHead-root .MuiTableCell-root': {

@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import type { Theme } from "@mui/material/styles";
 import Box from '@mui/material/Box';
@@ -118,9 +117,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
-    '& .MuiDrawer-paper': {
-      borderRight: 'none',
-    },
+    // '& .MuiDrawer-paper': {
+    //   borderRight: 'none',
+    // },
     variants: [
       {
         props: ({ open }) => open,
@@ -141,7 +140,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function AppNavigation() {
-//   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [title, setTitle]= useState('Dashboard')
   const location = useLocation();
@@ -157,8 +155,7 @@ export default function AppNavigation() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} sx={{bgcolor: 'white', color: 'black', borderBottom: 1, borderColor: 'divider'}} elevation={0}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -186,20 +183,20 @@ export default function AppNavigation() {
       <Drawer variant="permanent" open={open} 
         sx={{
           '& .MuiDrawer-paper': {
-            bgcolor: 'primary.main',
+            // bgcolor: 'primary.main',
           },
         }}
       >
         <DrawerHeader>
             {open && ( 
-            <Typography sx={{ fontWeight: 'bold', pl: 2, fontSize: '18px', color: 'white' }}>
+            <Typography sx={{ fontWeight: 'bold', pl: 2, fontSize: '18px', color: 'primary.main' }}>
                 BSS RESTAURANT
             </Typography>
             )}
             {!open && <img src={logoImg} style={{width: 50, margin: 'auto'}} />}
         </DrawerHeader>
         <Divider />
-        <List sx={{px: 1, pt: 3, color: 'rgba(255, 255, 255, 0.8)'}}>
+        <List sx={{px: 1, pt: 3, color: 'gray'}}>
           {navItems.map((navItem) => {
             const isActive = location.pathname === `/dashboard${navItem.path}`;
             return (
@@ -213,8 +210,8 @@ export default function AppNavigation() {
                     px: !open ? 2.5 : undefined,
                     borderRadius: 2,
                     '&&.active':{
-                        bgcolor: alpha('#fff', 0.2),
-                        color: 'white',
+                        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.2),
+                        color: 'primary.main',
                     }
                   },
                   open
@@ -249,7 +246,8 @@ export default function AppNavigation() {
                   primary={navItem.text}
                   sx={[
                     {
-                      '& .MuiListItemText-primary': {
+                      '& .MuiListItemText-primary': { 
+                        fontWeight: 'bold',
                       }
                     },
                     open
