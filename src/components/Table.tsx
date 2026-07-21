@@ -42,7 +42,7 @@ function EnhancedTableHead<T extends SingleRow>(props: EnhancedTableHeadProps<T>
             {headCell.sortable ? (
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
+                direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
@@ -66,17 +66,21 @@ function EnhancedTableHead<T extends SingleRow>(props: EnhancedTableHeadProps<T>
 }
 
 export default function EnhancedTable<T extends SingleRow>({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps<T>) {
-  const order = sort.split(" ")[1];
-  const tableOrder: "asc" | "desc" = order === "desc" ? "desc" : "asc";
+  const tableOrder: "asc" | "desc" = sort.startsWith("-") || sort.endsWith("desc") ? "desc" : "asc";
 
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: string) => {
-    const [currentField, currentOrder] = sort.split(' ');
-
-    let newOrder: "asc" | "desc" = 'asc';
-
-    if (currentField === property && currentOrder === 'asc') {
-      newOrder = 'desc';
+    if (property === "tableNumber" || property === "numberOfSeats") {
+      if (sort === property) {
+        onSortChange(`${property}`)
+      } else {
+        onSortChange(property)
+      }
+      return;
     }
+
+    const [currentField, currentOrder] = sort.split(" ");
+
+    const newOrder: "asc" | "desc" = currentField === property && currentOrder === "asc" ? "desc" : "asc";
 
     onSortChange(`${property} ${newOrder}`);
   };
@@ -137,7 +141,7 @@ export default function EnhancedTable<T extends SingleRow>({rows, total, current
             <EnhancedTableHead
               headCells={headCells}
               order={tableOrder}
-              orderBy={sort.split(' ')[0] || ''}
+              orderBy={sort.startsWith("-") ? sort.slice(1) : sort.split(' ')[0]}
               onRequestSort={handleRequestSort}
             />
             <TableBody>
