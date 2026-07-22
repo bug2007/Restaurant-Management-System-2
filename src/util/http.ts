@@ -90,25 +90,6 @@ export async function getTables({signal, page, perPage, search, sort}: GetEmploy
     return result
 } 
 
-// export async function getAuthProfile() {
-//     const token = localStorage.getItem('accessToken')
-//     const response = await fetch('https://bssrms.runasp.net/api/Auth/profile', {
-//         method: 'GET',
-//         headers: {
-//             'accept': 'text/plain',
-//             'Content-Type': 'application/json',
-//             'Authorization': `Bearer ${token}`
-//         }
-//         } 
-//     )
-//     if (!response.ok) {
-//         throw new Error('Failed to fetch admin profile.')
-//     }
-//     const result = await response.json()
-//     const { id, ...userInfo}= result.user
-//     return userInfo;
-// }
-
 export async function createOrder() {
     const token = localStorage.getItem('accessToken');
     try {
@@ -141,6 +122,23 @@ export async function createOrder() {
     } catch (err) {
         console.error(err)
     }
-
-    
 }
+
+// export async function getAuthProfile() {
+//     const token = localStorage.getItem('accessToken')
+//     const response = await fetch('https://bssrms.runasp.net/api/Auth/profile', {
+//         method: 'GET',
+//         headers: {
+//             'accept': 'text/plain',
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${token}`
+//         }
+//         } 
+//     )
+//     if (!response.ok) {
+//         throw new Error('Failed to fetch admin profile.')
+//     }
+//     const result = await response.json()
+//     const { id, ...userInfo}= result.user
+//     return userInfo;
+// }
