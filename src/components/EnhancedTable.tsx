@@ -4,68 +4,19 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import { IconButton, Tooltip } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import noProfileImg from '../assets/noPfp.png'
 import CircularProgress from '@mui/material/CircularProgress';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EnhancedTableHead from './EnhancedTableHead.tsx';
 
-import type {
-  EnhancedTableHeadProps,
-  EnhancedTableProps,
-  SingleRow
-} from "../types.ts";
+import type {EnhancedTableProps, SingleRow} from "../types.ts";
 
-
-function EnhancedTableHead<T extends SingleRow>(props: EnhancedTableHeadProps<T>) {
-  const { order, orderBy, onRequestSort, headCells } =
-    props;
-  const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
-  };
-
-  return ( 
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            sx={{width: headCell.id === 'actions' ? '10%' : '18%'}}
-            // sortDirection={orderBy === headCell.id ? order : false}  // for screen readers
-          >
-            {headCell.sortable ? (
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-
-                {orderBy === headCell.id && (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc'
-                      ? 'sorted descending'
-                      : 'sorted ascending'}
-                  </Box>
-                )}
-              </TableSortLabel>
-            ) : (
-              headCell.label
-            )}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-export default function EnhancedTable<T extends SingleRow>({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps<T>) {
+export default function EnhancedTable<T extends SingleRow>({handleStartDelete, rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps<T>) {
   const tableOrder: "asc" | "desc" = sort.startsWith("-") || sort.endsWith("desc") ? "desc" : "asc";
 
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: string) => {
@@ -92,6 +43,7 @@ export default function EnhancedTable<T extends SingleRow>({rows, total, current
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     onRowsPerPageChange(Number(event.target.value))
   };
+
 
   return (
     <Box sx={{ width: '100%', position: 'relative' }}>
@@ -171,7 +123,7 @@ export default function EnhancedTable<T extends SingleRow>({rows, total, current
                           </Tooltip>
 
                           <Tooltip title='Delete' placement='top-start'>
-                            <IconButton sx={{ml: 2, '&:hover': {color: 'red', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
+                            <IconButton onClick={() => handleStartDelete(row.id)} sx={{ml: 2, '&:hover': {color: 'red', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
                               <DeleteOutlinedIcon />
                             </IconButton>
                           </Tooltip>
@@ -227,6 +179,23 @@ export default function EnhancedTable<T extends SingleRow>({rows, total, current
     </Box>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // function descendingComparator(a, b, orderBy) {  

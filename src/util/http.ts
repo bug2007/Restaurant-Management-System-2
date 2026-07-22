@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+import type { SingleRow } from "../types";
 
 export const queryClient = new QueryClient();
 
@@ -89,6 +90,42 @@ export async function getTables({signal, page, perPage, search, sort}: GetEmploy
     const result = await response.json()
     return result
 } 
+
+export async function deleteEmployee({id}: {id: SingleRow["id"]}) {
+    const token = localStorage.getItem('accessToken');
+
+    const response = await fetch(`https://bssrms.runasp.net/api/Employee/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'accept': '*/*',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    if (!response.ok) {
+        throw new Error('Failed to delete employee.')
+    }
+
+    const result = await response.json()
+    return result
+}
+
+export async function deleteTable({id}: {id: string}) {
+    const token = localStorage.getItem('accessToken');
+
+    const response = await fetch(`https://bssrms.runasp.net/api/Table/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'accept': '*/*',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    if (!response.ok) {
+        throw new Error('Failed to delete table.')
+    }
+
+    const result = await response.json()
+    return result
+}
 
 export async function createOrder() {
     const token = localStorage.getItem('accessToken');

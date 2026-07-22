@@ -64,4 +64,5 @@ export interface EnhancedTableProps<T extends SingleRow> {
   onSortChange: (sort: string) => void;
   isPending: boolean;
   headCells: HeadCell<T>[];
+  handleStartDelete: (id: SingleRow["id"]) => void;
 }
