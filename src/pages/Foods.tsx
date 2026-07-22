@@ -20,7 +20,7 @@ const headCells: HeadCell<Food>[] = [
     id: "price",
     label: "Price",
     sortable: true,
-    render: (row) => row.price,
+    render: (row) => row.price,   
   },
   {
     id: "discountType",
