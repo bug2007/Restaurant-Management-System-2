@@ -19,6 +19,17 @@ export interface Employee {
   user: User;
 }
 
+export interface Food {
+  id: number,
+  name: string,
+  description: string,
+  price: number,
+  discountType: string,
+  discount: number,
+  discountPrice: number,
+  image: string | null
+}
+
 export interface AssignedEmployee {
   employeeTableId: number;
   employeeId: string;

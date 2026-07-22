@@ -86,10 +86,9 @@ export default function Employees() {
     },
   })
 
- 
   function handleStartDelete(id: SingleRow["id"]) {
-    setEmployeeToDelete(id)
     reset()
+    setEmployeeToDelete(id)
   }
   function handleStopDelete() {
     setEmployeeToDelete("")
@@ -100,7 +99,6 @@ export default function Employees() {
 
   return (
     <>
-    
     <TransitionsModal open={!!employeeToDelete} onClose={isPendingDeletion ? undefined : handleStopDelete}>
       {!isSuccess && !isErrorDeleting && (
         <>

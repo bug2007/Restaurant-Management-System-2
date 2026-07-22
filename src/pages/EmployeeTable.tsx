@@ -1,10 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { getTables } from "../util/http.js";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { deleteTable, getTables, queryClient } from "../util/http.js";
 import useTitle from "../hooks/useTitle.js";
 import EnhancedTable from "../components/EnhancedTable.js";
 import { useState } from "react";
+import { Typography, Box, Button } from "@mui/material";
 
-import type { EmployeeTable, HeadCell } from "../types.ts";
+import type { EmployeeTable, HeadCell, SingleRow } from "../types.ts";
+import TransitionsModal from "../components/TransitionsModal.tsx";
 
 const headCells: HeadCell<EmployeeTable>[] = [
   {
@@ -45,7 +47,8 @@ export default function EmployeeTable() {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState<number | undefined>(undefined);
   const [sort, setSort] = useState("");
-
+  const [tableToDelete, setTableToDelete] = useState<SingleRow["id"]>(-1)
+  
   const { data, isPending } = useQuery({
     queryKey: ["tables", page, perPage, sort],
     queryFn: ({ signal }) => getTables({ signal, page, perPage, sort }),
@@ -59,8 +62,52 @@ export default function EmployeeTable() {
     rowsPerPageOptions.push(i);
   }
 
+  const { mutate, data: deleteData, reset, isPending: isPendingDeletion, isSuccess, isError: isErrorDeleting, error: deleteError } = useMutation({
+    mutationFn: deleteTable,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['tables']
+      })
+    },
+  })
+
+  function handleStartDelete(id: SingleRow["id"]) {
+    reset()
+    setTableToDelete(id)
+  }
+  function handleStopDelete() {
+    setTableToDelete(-1)
+  }
+  function handleDelete() {
+    mutate({id: tableToDelete})
+  }
+
   return (
+    <>
+    <TransitionsModal open={tableToDelete !== -1} onClose={isPendingDeletion ? undefined : handleStopDelete}>
+          {!isSuccess && !isErrorDeleting && (
+            <>
+            <Box sx={{width: '90%'}}>
+              <Typography variant="h6" sx={{lineHeight: 1.5, mb: 1}}>Are you sure you want to delete this table?</Typography>
+              <Typography sx={{fontSize: 15}}>This action cannot be undone.</Typography>
+            </Box>
+            <Box sx={{mt: 4, display: 'flex', justifyContent: 'end', gap: 2}}>
+              <Button variant="contained" color="inherit" sx={{textTransform: 'none', fontSize: 16}} onClick={handleStopDelete} disabled={isPendingDeletion}>Cancel</Button>
+              <Button variant="contained" color="error" sx={{textTransform: 'none', fontSize: 16}} onClick={handleDelete} disabled={isPendingDeletion}>{isPendingDeletion ? 'Deleting...' : 'Delete'}</Button>
+            </Box>
+            </>
+          )}
+          {(isSuccess || deleteError) && (
+            <>
+              <Typography variant="h6" color="error" sx={{lineHeight: 1.5, textAlign: 'center'}}>
+                {isSuccess ? deleteData?.message : deleteError?.message}
+              </Typography>
+              <Button variant="contained" color="inherit" sx={{mt: 3, width: 'fit-content', textTransform: 'none', fontSize: 14, alignSelf: 'center'}} onClick={handleStopDelete}>Close</Button>
+            </>
+          )}
+        </TransitionsModal>
     <EnhancedTable
+      handleStartDelete={handleStartDelete}
       headCells={headCells}
       isPending={isPending}
       rows={data?.data || []}
@@ -76,5 +123,6 @@ export default function EmployeeTable() {
       sort={sort}
       onSortChange={setSort}
     />
+    </>
   );
 }
