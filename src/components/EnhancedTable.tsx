@@ -7,16 +7,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { OutlinedInput } from "@mui/material";
 import { IconButton, Tooltip } from '@mui/material';
 import noProfileImg from '../assets/noPfp.png'
 import CircularProgress from '@mui/material/CircularProgress';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EnhancedTableHead from './EnhancedTableHead.tsx';
+import AddButton from './AddButton.tsx';
 
 import type {EnhancedTableProps, SingleRow} from "../types.ts";
 
-export default function EnhancedTable<T extends SingleRow>({handleStartDelete, rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells}: EnhancedTableProps<T>) {
+export default function EnhancedTable<T extends SingleRow>({handleStartDelete, rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells, type}: EnhancedTableProps<T>) {
   const tableOrder: "asc" | "desc" = sort.startsWith("-") || sort.endsWith("desc") ? "desc" : "asc";
 
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: string) => {
@@ -63,8 +65,20 @@ export default function EnhancedTable<T extends SingleRow>({handleStartDelete, r
         </Box>
       )}
       <Paper sx={{ width: '100%', mb: 2, borderRadius: 3, overflow: 'hidden', border: 1, borderColor: 'divider'}} elevation={0}>
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            height: 65
+          }}
+        >
+          <OutlinedInput placeholder="Search..." />
+          <AddButton type={type} />
+        </Box>
         <TableContainer sx={{
-            height: isPending ? '25vh' : '75vh',
+            height: isPending ? '25vh' : undefined,
             '&::-webkit-scrollbar': { display: 'none' },
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'}}>

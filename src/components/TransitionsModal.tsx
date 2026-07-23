@@ -3,13 +3,12 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Box from '@mui/material/Box';
 import type { ReactNode } from "react";
-import CloseIcon from '@mui/icons-material/Close';
-import { IconButton } from '@mui/material';
 
 interface TransitionsModalProps {
   children: ReactNode;
   open: boolean;
   onClose?: () => void;
+  sx?: {}
 }
 
 const style = {
@@ -18,8 +17,8 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
+  maxHeight: '90vh',
   bgcolor: 'background.paper',
-  // border: '2px solid #000',
   boxShadow: 24,
   px: 4,
   pt: 1,
@@ -27,7 +26,7 @@ const style = {
   borderRadius: 3
 };
 
-export default function TransitionsModal({children, onClose, open}: TransitionsModalProps) {
+export default function TransitionsModal({children, onClose, open, sx}: TransitionsModalProps) {
   return (
       <Modal
         open={open}
@@ -41,10 +40,7 @@ export default function TransitionsModal({children, onClose, open}: TransitionsM
         }}
       >
         <Fade in={open}>
-          <Box sx={{...style, display: 'flex', flexDirection: 'column'}}>
-            <IconButton sx={{marginLeft: 'auto', marginRight: -3, marginBottom: -2}} onClick={onClose}>
-              <CloseIcon></CloseIcon>
-            </IconButton>
+          <Box sx={{...style, ...sx}}>
             {children}
           </Box>
         </Fade>

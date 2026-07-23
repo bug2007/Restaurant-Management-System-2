@@ -6,6 +6,7 @@ import { useState } from "react";
 import TransitionsModal from "../components/TransitionsModal.tsx";
 import { Typography, Box, Button } from "@mui/material";
 import type { Food, HeadCell, SingleRow } from "../types.ts";
+import CloseIconDeleteModal from "../components/CloseIconDeleteModal.tsx";
 
 const headCells: HeadCell<Food>[] = [
   {
@@ -90,7 +91,8 @@ export default function Employees() {
 
   return (
     <>
-    <TransitionsModal open={foodToDelete !== -1} onClose={isPendingDeletion ? undefined : handleStopDelete}>
+    <TransitionsModal sx={{display: 'flex', flexDirection: 'column'}} open={foodToDelete !== -1} onClose={isPendingDeletion ? undefined : handleStopDelete}>
+          <CloseIconDeleteModal onClose={isPendingDeletion ? undefined : handleStopDelete} />
           {!isSuccess && !isErrorDeleting && (
             <>
             <Box sx={{width: '90%'}}>
@@ -113,6 +115,7 @@ export default function Employees() {
           )}
         </TransitionsModal>
     <EnhancedTable
+      type="Food"
       handleStartDelete={handleStartDelete}
       headCells={headCells}
       isPending={isPending}

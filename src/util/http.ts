@@ -45,11 +45,11 @@ export async function getEmployees({signal, page, perPage, search, sort}: GetEmp
     if (sort) params.append('Sort', sort);
 
     const url = `https://bssrms.runasp.net/api/Employee/datatable?${params.toString()}`;
-    
     const response = await fetch(url,{
         method: 'GET',
         headers: {
             'accept': '*/*',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         signal
@@ -78,6 +78,7 @@ export async function getTables({signal, page, perPage, search, sort}: GetEmploy
         method: 'GET',
         headers: {
             'accept': '*/*',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         signal
@@ -106,6 +107,7 @@ export async function getFoods({signal, page, perPage, search, sort}: GetEmploye
         method: 'GET',
         headers: {
             'accept': '*/*',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         signal
@@ -121,11 +123,13 @@ export async function getFoods({signal, page, perPage, search, sort}: GetEmploye
 
 export async function deleteEmployee({id}: {id: SingleRow["id"]}) {
     const token = localStorage.getItem('accessToken');
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
 
     const response = await fetch(`https://bssrms.runasp.net/api/Employee/delete/${id}`, {
         method: 'DELETE',
         headers: {
             'accept': '*/*',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     })
@@ -144,6 +148,7 @@ export async function deleteTable({id}: {id: SingleRow["id"]}) {
         method: 'DELETE',
         headers: {
             'accept': '*/*',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     })
@@ -162,11 +167,31 @@ export async function deleteFood({id}: {id: SingleRow["id"]}) {
         method: 'DELETE',
         headers: {
             'accept': '*/*',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     })
     if (!response.ok) {
         throw new Error('Failed to delete food.')
+    }
+
+    const result = await response.json()
+    return result
+}
+export async function createEmployee({body}: { body: Record<string, unknown> }) {
+    const token = localStorage.getItem('accessToken');
+
+    const response = await fetch('https://bssrms.runasp.net/api/Employee/create', {
+        method: 'POST',
+        headers: {
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    })
+    if (!response.ok) {
+        throw new Error('Failed to create employee.')
     }
 
     const result = await response.json()

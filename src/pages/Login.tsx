@@ -12,7 +12,6 @@ import { authStateActions } from '../store/authState-slice.js';
 
 type LoginField = 'userName' | 'password';
 
- 
 export default function Login() {
     const navigate = useNavigate();
     const [loginSuccess, setLoginSuccess] = useState(false)
@@ -94,7 +93,7 @@ export default function Login() {
                         display: 'flex', 
                         width: '80%', 
                         flexDirection: 'column', 
-                        gap: '25px',
+                        gap: '25px', 
                         }}>
                     <Typography sx={{fontSize: '32px', marginBottom: '4rem'}}>BSS Restaurant</Typography>
                     

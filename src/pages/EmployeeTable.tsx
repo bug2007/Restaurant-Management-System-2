@@ -4,7 +4,7 @@ import useTitle from "../hooks/useTitle.js";
 import EnhancedTable from "../components/EnhancedTable.js";
 import { useState } from "react";
 import { Typography, Box, Button } from "@mui/material";
-
+import CloseIconDeleteModal from "../components/CloseIconDeleteModal.tsx";
 import type { EmployeeTable, HeadCell, SingleRow } from "../types.ts";
 import TransitionsModal from "../components/TransitionsModal.tsx";
 
@@ -84,7 +84,8 @@ export default function EmployeeTable() {
 
   return (
     <>
-    <TransitionsModal open={tableToDelete !== -1} onClose={isPendingDeletion ? undefined : handleStopDelete}>
+    <TransitionsModal sx={{display: 'flex', flexDirection: 'column'}} open={tableToDelete !== -1} onClose={isPendingDeletion ? undefined : handleStopDelete}>
+          <CloseIconDeleteModal onClose={isPendingDeletion ? undefined : handleStopDelete} />
           {!isSuccess && !isErrorDeleting && (
             <>
             <Box sx={{width: '90%'}}>
@@ -107,6 +108,7 @@ export default function EmployeeTable() {
           )}
         </TransitionsModal>
     <EnhancedTable
+      type="Table"
       handleStartDelete={handleStartDelete}
       headCells={headCells}
       isPending={isPending}

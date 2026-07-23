@@ -7,6 +7,7 @@ import { Button, Typography, Box } from "@mui/material";
 
 import type { Employee, HeadCell, SingleRow } from "../types.ts";
 import TransitionsModal from "../components/TransitionsModal.tsx";
+import CloseIconDeleteModal from "../components/CloseIconDeleteModal.tsx";
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {
@@ -99,7 +100,8 @@ export default function Employees() {
 
   return (
     <>
-    <TransitionsModal open={!!employeeToDelete} onClose={isPendingDeletion ? undefined : handleStopDelete}>
+    <TransitionsModal sx={{display: 'flex', flexDirection: 'column'}} open={!!employeeToDelete} onClose={isPendingDeletion ? undefined : handleStopDelete}>
+      <CloseIconDeleteModal onClose={isPendingDeletion ? undefined : handleStopDelete} />
       {!isSuccess && !isErrorDeleting && (
         <>
         <Box sx={{width: '90%'}}>
@@ -122,6 +124,7 @@ export default function Employees() {
       )}
     </TransitionsModal>
     <EnhancedTable
+      type="Employee"
       handleStartDelete={handleStartDelete}
       headCells={headCells}
       isPending={isPending}

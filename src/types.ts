@@ -64,6 +64,7 @@ export interface EnhancedTableHeadProps<T extends SingleRow> {   //T can be any 
 }
 
 export interface EnhancedTableProps<T extends SingleRow> {
+  type: string;
   rows: T[];
   total: number;
   currentPage: number;
