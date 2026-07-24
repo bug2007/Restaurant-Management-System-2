@@ -11,13 +11,13 @@ import { createEmployee, queryClient } from '../util/http';
 function fileToBase64(file: File): Promise<string | null> {
   return new Promise((resolve) => {
     if (!file || file.size === 0) {
-      resolve(null);
+      resolve("");
       return;
     }
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => resolve(null);
+    reader.onerror = () => resolve("");
   });
 }
 
@@ -70,7 +70,7 @@ export default function AddEmployeeForm({onClose}: {onClose: () => void}) {
     if (Object.keys(newErrors).length > 0) return;
 
     const imageFile = formData.get('image') as File;
-    const base64String = imageFile ? await fileToBase64(imageFile) : null;
+    const base64String = imageFile ? await fileToBase64(imageFile) : "";
 
     const body: Record<string, unknown> = Object.fromEntries(formData);
 
@@ -130,7 +130,7 @@ export default function AddEmployeeForm({onClose}: {onClose: () => void}) {
               {errors.firstName && <FormHelperText error>{errors.firstName}</FormHelperText>}
             </div>
             <div>
-              <InputLabel htmlFor='middleName' sx={{color: 'black', marginBottom: '5px'}}>Middle Name <span style={{color: 'red'}}>*</span></InputLabel>
+              <InputLabel htmlFor='middleName' sx={{color: 'black', marginBottom: '5px'}}>Middle Name</InputLabel>
               <OutlinedInput id='middleName' name='middleName' fullWidth placeholder='Middle Name' />
             </div>
           </Box>
@@ -142,7 +142,7 @@ export default function AddEmployeeForm({onClose}: {onClose: () => void}) {
               {errors.lastName && <FormHelperText error>{errors.lastName}</FormHelperText>}
             </div>
             <div>
-              <InputLabel htmlFor='spouseName' sx={{color: 'black', marginBottom: '5px'}}>Spouse Name <span style={{color: 'red'}}>*</span></InputLabel>
+              <InputLabel htmlFor='spouseName' sx={{color: 'black', marginBottom: '5px'}}>Spouse Name</InputLabel>
               <OutlinedInput id='spouseName' name='spouseName' fullWidth placeholder="Spouse Name" />
             </div>
           </Box>

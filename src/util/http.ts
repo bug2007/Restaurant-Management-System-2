@@ -178,6 +178,46 @@ export async function deleteFood({id}: {id: SingleRow["id"]}) {
     const result = await response.json()
     return result
 }
+
+export async function createTable({body}: { body: Record<string, unknown> }) {
+    const token = localStorage.getItem('accessToken');
+
+    const response = await fetch('https://bssrms.runasp.net/api/Table/create', {
+        method: 'POST',
+        headers: {
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    })
+    if (!response.ok) {
+        throw new Error('Failed to create table.')
+    }
+
+    const result = await response.json()
+    return result
+}
+
+export async function createFood({body}: { body: Record<string, unknown> }) {
+    const token = localStorage.getItem('accessToken');
+
+    const response = await fetch('https://bssrms.runasp.net/api/Food/create', {
+        method: 'POST',
+        headers: {
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    })
+    if (!response.ok) {
+        throw new Error('Failed to create food.')
+    }
+
+    const result = await response.json()
+    return result
+}
 export async function createEmployee({body}: { body: Record<string, unknown> }) {
     const token = localStorage.getItem('accessToken');
 

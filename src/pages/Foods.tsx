@@ -56,7 +56,7 @@ export default function Employees() {
   const [sort, setSort] = useState("");
   const [foodToDelete, setFoodToDelete] = useState<SingleRow["id"]>(-1)
   
-  const { data, isPending } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["foods", page, perPage, sort],
     queryFn: ({ signal }) => getFoods({ signal, page, perPage, sort }),
   });
@@ -118,7 +118,7 @@ export default function Employees() {
       type="Food"
       handleStartDelete={handleStartDelete}
       headCells={headCells}
-      isPending={isPending}
+      isFetching={isFetching}
       rows={data?.data || []}
       total={total}
       currentPage={data?.current_page || 1}

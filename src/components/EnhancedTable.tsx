@@ -18,7 +18,7 @@ import AddButton from './AddButton.tsx';
 
 import type {EnhancedTableProps, SingleRow} from "../types.ts";
 
-export default function EnhancedTable<T extends SingleRow>({handleStartDelete, rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending, headCells, type}: EnhancedTableProps<T>) {
+export default function EnhancedTable<T extends SingleRow>({handleStartDelete, rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isFetching, headCells, type}: EnhancedTableProps<T>) {
   const tableOrder: "asc" | "desc" = sort.startsWith("-") || sort.endsWith("desc") ? "desc" : "asc";
 
   const handleRequestSort = (_event: React.MouseEvent<unknown>, property: string) => {
@@ -49,7 +49,7 @@ export default function EnhancedTable<T extends SingleRow>({handleStartDelete, r
 
   return (
     <Box sx={{ width: '100%', position: 'relative' }}>
-      {isPending && (
+      {isFetching && (
         <Box
           sx={{
             position: 'absolute',
@@ -78,7 +78,7 @@ export default function EnhancedTable<T extends SingleRow>({handleStartDelete, r
           <AddButton type={type} />
         </Box>
         <TableContainer sx={{
-            height: isPending ? '25vh' : undefined,
+            height: isFetching ? '25vh' : undefined,
             '&::-webkit-scrollbar': { display: 'none' },
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'}}>
@@ -180,7 +180,7 @@ export default function EnhancedTable<T extends SingleRow>({handleStartDelete, r
             </TableBody>
           </Table>
         </TableContainer>
-        {!isPending && <TablePagination
+        {!isFetching && <TablePagination
           component="div"
           count={total}
           page={currentPage - 1}

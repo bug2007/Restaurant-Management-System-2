@@ -65,7 +65,7 @@ export default function Employees() {
   const [sort, setSort] = useState("");
   const [employeeToDelete, setEmployeeToDelete] = useState<SingleRow["id"]>("")
 
-  const { data, isPending } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["employees", page, perPage, sort],
     queryFn: ({ signal }) => getEmployees({ signal, page, perPage, sort }),
   });
@@ -127,7 +127,7 @@ export default function Employees() {
       type="Employee"
       handleStartDelete={handleStartDelete}
       headCells={headCells}
-      isPending={isPending}
+      isFetching={isFetching}
       rows={data?.data || []}
       total={total}
       currentPage={data?.current_page || 1}
