@@ -54,7 +54,7 @@ export default function AddTableForm({onClose}: {onClose: () => void}) {
 
     body.image = imageFile && imageFile.size > 0 ? imageFile.name : "";
     body.base64 = base64String;
-    body.numberOfSeats = Number(body.numberOfSeats)
+    body.numberOfSeats = body.numberOfSeats
     mutate({body})
   }
 
